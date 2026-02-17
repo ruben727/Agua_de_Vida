@@ -1,0 +1,346 @@
+/* ========== NAVBAR PRINCIPAL ========== */
+.menu {
+  background: #225574;
+  color: white;
+  padding: 15px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* Logo */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.logo-img {
+  height: 40px;
+  width: auto;
+}
+
+/* Links de navegación */
+.links {
+  display: flex;
+  gap: 35px;
+  flex: 1;
+  justify-content: center;
+}
+
+.links a {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  position: relative;
+  padding: 8px 0;
+}
+
+.links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #4dc9e6;
+  transition: width 0.3s ease;
+}
+
+.links a:hover::after,
+.links a.active::after {
+  width: 100%;
+}
+
+.links a:hover {
+  color: #4dc9e6;
+}
+
+.links a.active {
+  color: #4dc9e6;
+}
+
+/* Iconos */
+.icons {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.icon-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #4dc9e6;
+  transform: scale(1.05);
+}
+
+.icon-btn:active {
+  transform: scale(0.95);
+}
+
+/* ========== SEARCH OVERLAY ========== */
+.search-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.97);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 40px;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+}
+
+/* Header del search */
+.search-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 60px;
+}
+
+/* Botón cerrar */
+.close-btn {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #4dc9e6;
+  transform: rotate(90deg);
+}
+
+/* Caja de búsqueda */
+.search-box {
+  margin: auto;
+  width: 70%;
+  max-width: 800px;
+  border-bottom: 2px solid #555;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px 0;
+  transition: border-color 0.3s ease;
+}
+
+.search-box:focus-within {
+  border-color: #4dc9e6;
+}
+
+.search-box input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 32px;
+  font-weight: 300;
+  padding: 15px 5px;
+  outline: none;
+}
+
+.search-box input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.search-icon {
+  color: rgba(255, 255, 255, 0.5);
+  flex-shrink: 0;
+}
+
+/* ========== SIDEBAR ========== */
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 999;
+  backdrop-filter: blur(3px);
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: -400px;
+  width: 100%;
+  max-width: 400px;
+  height: 100vh;
+  background: #1a1a1a;
+  color: white;
+  z-index: 1000;
+  transition: right 0.3s ease;
+  box-shadow: -5px 0 20px rgba(0, 0, 0, 0.5);
+  overflow-y: auto;
+}
+
+.sidebar.active {
+  right: 0;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-content {
+  padding: 30px 25px;
+}
+
+.sidebar-content h3 {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+/* Enlaces externos */
+.external-links {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 40px;
+}
+
+.external-links a {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: white;
+  text-decoration: none;
+  padding: 15px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.external-links a:hover {
+  background: rgba(77, 201, 230, 0.1);
+  color: #4dc9e6;
+  transform: translateX(5px);
+}
+
+/* Información de contacto */
+.contact-info {
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.contact-info p {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 15px 0;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+}
+
+.contact-info lucide-icon {
+  color: #4dc9e6;
+  flex-shrink: 0;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .menu {
+    padding: 15px 20px;
+  }
+
+  .links {
+    display: none;
+  }
+
+  .logo {
+    font-size: 18px;
+  }
+
+  .logo-img {
+    height: 35px;
+  }
+
+  .search-box {
+    width: 90%;
+  }
+
+  .search-box input {
+    font-size: 24px;
+  }
+
+  .sidebar {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-overlay {
+    padding: 20px;
+  }
+
+  .search-box input {
+    font-size: 20px;
+  }
+}
+
+/* ========== SCROLLBAR PERSONALIZADO (para sidebar) ========== */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(77, 201, 230, 0.3);
+  border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(77, 201, 230, 0.5);
+}
+
+svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
+.external-links svg {
+  width: 22px;
+  height: 22px;
+}
