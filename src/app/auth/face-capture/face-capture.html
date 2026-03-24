@@ -1,0 +1,49 @@
+<!-- src/app/auth/face-capture/face-capture.html -->
+<div class="face-capture-container">
+  <div class="video-wrapper">
+    <video
+      #videoElement
+      [class.active]="isCameraActive"
+      autoplay
+      playsinline
+      muted>
+    </video>
+    <canvas #canvasElement style="display: none;"></canvas>
+
+    @if (isProcessing) {
+      <div class="processing-overlay">
+        <div class="spinner"></div>
+        <p>{{ message }}</p>
+      </div>
+    }
+  </div>
+
+  @if (message && !isProcessing) {
+    <div
+      class="message"
+      [class.success]="message.includes('✅')"
+      [class.error]="message.includes('❌')">
+      {{ message }}
+    </div>
+  }
+
+  <div class="controls">
+    @if (!isCameraActive) {
+      <button (click)="startCamera()" class="btn-primary">
+        📷 Iniciar Cámara
+      </button>
+    }
+
+    @if (isCameraActive && !isProcessing) {
+      <button (click)="captureImage()" class="btn-success">
+        📸 Capturar Rostro
+      </button>
+    }
+
+    @if (isCameraActive) {
+      <button (click)="stopCamera()" class="btn-secondary">
+        ⏹️ Detener
+      </button>
+    }
+  </div>
+</div>

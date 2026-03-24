@@ -1,0 +1,71 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <h2>🔐 Iniciar Sesión</h2>
+      @if (step === 'credentials') {
+        <p>Ingresa tus credenciales</p>
+      } @else {
+        <p>👤 Verificación Facial con Azure</p>
+      }
+    </div>
+
+    <!-- Paso 1: Credenciales -->
+    @if (step === 'credentials') {
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmitCredentials()">
+        
+        <div class="form-group">
+          <label>Correo electrónico</label>
+          <input 
+            type="email" 
+            formControlName="email" 
+            placeholder="ejemplo@correo.com"
+            class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label>Contraseña</label>
+          <input 
+            type="password" 
+            formControlName="password" 
+            placeholder="••••••••"
+            class="form-control">
+        </div>
+
+        @if (errorMessage) {
+          <div class="error-message">
+            {{ errorMessage }}
+          </div>
+        }
+
+        <button 
+          type="submit" 
+          class="btn-primary btn-block"
+          [disabled]="loginForm.invalid || isLoading">
+          {{ isLoading ? 'Procesando...' : 'Iniciar Sesión' }}
+        </button>
+      </form>
+    }
+
+    <!-- Paso 2: Verificación Facial -->
+    @if (step === 'face-verification') {
+      <div>
+        <app-face-capture
+          (faceCaptured)="onFaceCaptured($event)"
+          (error)="onFaceError($event)">
+        </app-face-capture>
+
+        @if (errorMessage) {
+          <div class="error-message">
+            {{ errorMessage }}
+          </div>
+        }
+
+        <div class="alternative-actions">
+          <button class="btn-link" (click)="goBack()">
+            ← Usar otra cuenta
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+</div>

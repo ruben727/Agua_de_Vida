@@ -1,1 +1,121 @@
-<p>contacto works!</p>
+<section class="contact-container">
+
+  <h1 class="title">Contacto</h1>
+
+  <p class="subtitle">
+    Si tienes alguna duda o deseas comunicarte con nosotros,
+    puedes encontrarnos en la siguiente ubicación o enviarnos un mensaje.
+  </p>
+
+
+  <!-- MAPA -->
+
+  <div class="map-container">
+
+    <iframe
+      src="https://maps.google.com/maps?q=Queretaro&t=&z=13&ie=UTF8&iwloc=&output=embed"
+      loading="lazy">
+    </iframe>
+
+  </div>
+
+
+
+  <!-- INFO + FORM -->
+
+  <div class="contact-grid">
+
+
+    <!-- INFORMACION -->
+
+    <div class="contact-info">
+
+      <h2>Información</h2>
+
+      <p>
+        Dirección:<br>
+        Querétaro, México
+      </p>
+
+      <p>
+        Teléfono:<br>
+        +52 4411064612
+      </p>
+
+      <p>
+        Correo:<br>
+        contacto@aguadevida.org
+      </p>
+
+
+      <div class="social">
+
+        <h3>Redes Sociales</h3>
+
+        <div class="social-links">
+
+          <a href="#" target="_blank">Facebook</a>
+          <a href="#" target="_blank">YouTube</a>
+          <a href="#" target="_blank">Instagram</a>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- FORMULARIO -->
+
+    <div class="contact-form">
+
+      <h2>Envíanos un mensaje</h2>
+
+      <form (ngSubmit)="enviarFormulario()">
+
+        <input
+          type="text"
+          placeholder="Nombre"
+          [(ngModel)]="nombre"
+          name="nombre"
+          required
+        >
+
+        <input
+          type="email"
+          placeholder="Correo electrónico"
+          [(ngModel)]="correo"
+          name="correo"
+          required
+        >
+
+        <input
+          type="tel"
+          placeholder="Número de teléfono"
+          [(ngModel)]="telefono"
+          name="telefono"
+        >
+
+        <textarea
+          rows="5"
+          placeholder="Escribe tu duda o mensaje..."
+          [(ngModel)]="mensaje"
+          name="mensaje"
+          required
+        ></textarea>
+
+        <button type="submit">
+          Enviar mensaje
+        </button>
+
+      </form>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<app-footer></app-footer>

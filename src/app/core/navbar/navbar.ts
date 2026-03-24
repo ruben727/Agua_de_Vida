@@ -1,4 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Router } from '@angular/router';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -16,39 +17,74 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './navbar.css'
 })
 export class NavbarComponent {
+
+  constructor(private router: Router){}
+
   @ViewChild('searchInput') searchInput?: ElementRef;
 
   showSearch = false;
   showSidebar = false;
   searchQuery = '';
+  results:any[] = [];
 
-  openSearch() {
+  pages = [
+    { title:'Inicio', route:'/', keywords:['inicio','iglesia'] },
+    { title:'Predicas', route:'/predicas', keywords:['predicas','sermon'] },
+    { title:'Avisos', route:'/avisos', keywords:['avisos','eventos'] },
+    { title:'Contacto', route:'/contacto', keywords:['contacto','telefono','correo'] }
+  ];
+
+  openSearch(){
+
     this.showSearch = true;
-    document.body.style.overflow = 'hidden';
-    setTimeout(() => {
+
+    setTimeout(()=>{
       this.searchInput?.nativeElement?.focus();
-    }, 100);
+    },200);
+
   }
 
-  closeSearch() {
+  closeSearch(){
+
     this.showSearch = false;
     this.searchQuery = '';
-    document.body.style.overflow = '';
+    this.results = [];
+
   }
 
-  performSearch() {
-    if (this.searchQuery.trim()) {
-      console.log('Buscando:', this.searchQuery);
+  performSearch(){
+
+    const q = this.searchQuery.toLowerCase();
+
+    if(q.length < 2){
+      this.results = [];
+      return;
     }
+
+    this.results = this.pages.filter(p =>
+      p.title.toLowerCase().includes(q) ||
+      p.keywords.some(k => k.includes(q))
+    );
+
   }
 
-  toggleSidebar() {
+  goTo(route:string){
+
+    this.router.navigate([route]);
+    this.closeSearch();
+
+  }
+
+  toggleSidebar(){
+
     this.showSidebar = !this.showSidebar;
-    document.body.style.overflow = this.showSidebar ? 'hidden' : '';
+
   }
 
-  closeSidebar() {
+  closeSidebar(){
+
     this.showSidebar = false;
-    document.body.style.overflow = '';
+
   }
+
 }

@@ -1,0 +1,38 @@
+<section class="avisos-section">
+  <div class="container">
+    <h1 class="section-title">Avisos</h1>
+    <p class="section-subtitle">
+      Mantente informado sobre nuestras próximas actividades y eventos especiales.
+    </p>
+
+    <div class="avisos-grid">
+      <div class="aviso-card" *ngFor="let aviso of avisos">
+
+        <div class="image-container">
+          <img [src]="aviso.imagen" [alt]="aviso.titulo">
+        </div>
+
+        <div class="aviso-content">
+          <h2>{{ aviso.titulo }}</h2>
+          <span class="fecha">{{ aviso.fecha }}</span>
+
+          <p class="resumen">
+            {{ aviso.resumen }}
+          </p>
+
+          <div class="descripcion" [class.show]="aviso.expanded">
+            <p>{{ aviso.descripcion }}</p>
+          </div>
+
+          <button (click)="toggleAviso(aviso)">
+            {{ aviso.expanded ? 'Ver menos' : 'Ver más' }}
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<app-footer></app-footer>
