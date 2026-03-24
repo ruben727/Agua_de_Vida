@@ -1,110 +1,58 @@
-// src/app/auth/login/login.ts
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth';
-import { FaceCapture } from '../face-capture/face-capture';
-import { LoginResponse } from '../../models/user';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FaceCapture
-  ],
+  imports: [CommonModule, FormsModule, HttpClientModule],
   templateUrl: './login.html',
   styleUrls: ['./login.css']
 })
 export class Login {
-  loginForm: FormGroup;
-  isLoading = false;
-  errorMessage = '';
-  step: 'credentials' | 'face-verification' = 'credentials';
-  currentUserId: string = '';
-  faceDescriptor: Float32Array | null = null; // 👈 Añadido para guardar el descriptor
+  email = signal('');
+  password = signal('');
+  loading = signal(false);
+  success = signal(false);
+  errorMsg = signal('');
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router
-  ) {
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
-    });
+  private API_URL = 'http://localhost:3000/api';
+
+  constructor(private http: HttpClient, private router: Router) {}
+
+  onEmailChange(value: string) {
+    this.email.set(value);
+    this.errorMsg.set('');
   }
 
-  onSubmitCredentials(): void {
-    if (this.loginForm.invalid) return;
+  onPasswordChange(value: string) {
+    this.password.set(value);
+    this.errorMsg.set('');
+  }
 
-    this.isLoading = true;
-    this.errorMessage = '';
+  onSubmit() {
+    if (!this.email() || !this.password()) {
+      this.errorMsg.set('Por favor completa todos los campos.');
+      return;
+    }
 
-    const { email, password } = this.loginForm.value;
+    this.loading.set(true);
+    this.errorMsg.set('');
 
-    this.authService.login(email, password).subscribe({
-      next: (response: LoginResponse) => {
-        this.isLoading = false;
-        
-        if (response.success && response.user) {
-          if (response.user.faceRegistered) {
-            this.currentUserId = response.user.id;
-            this.step = 'face-verification';
-          } else {
-            this.router.navigate(['/dashboard']);
-          }
-        } else {
-          this.errorMessage = response.error || 'Credenciales incorrectas';
-        }
+    this.http.post(`${this.API_URL}/login`, {
+      email: this.email(),
+      password: this.password()
+    }).subscribe({
+      next: () => {
+        this.loading.set(false);
+        this.success.set(true);
       },
-      error: (error: any) => {
-        this.isLoading = false;
-        this.errorMessage = 'Error de conexión con el servidor';
-        console.error('Login error:', error);
+      error: (err) => {
+        this.loading.set(false);
+        this.errorMsg.set(err.error?.message || 'Credenciales incorrectas.');
       }
     });
-  }
-
-  // 👈 CORREGIDO: Ahora acepta descriptor en lugar de faceId
-  onFaceCaptured(event: { descriptor: Float32Array; imageBase64: string }): void {
-    this.isLoading = true;
-    this.errorMessage = '';
-    this.faceDescriptor = event.descriptor;
-    
-    console.log('Face captured, descriptor length:', event.descriptor.length);
-    console.log('Image captured, size:', event.imageBase64.length);
-    
-    // Aquí puedes enviar el descriptor a tu backend para verificación
-    this.authService.completeFaceLogin(this.currentUserId).subscribe({
-      next: (response: LoginResponse) => {
-        this.isLoading = false;
-        
-        if (response.success) {
-          this.router.navigate(['/dashboard']);
-        } else {
-          this.errorMessage = response.error || 'Error en verificación facial';
-          this.step = 'credentials';
-        }
-      },
-      error: (error: any) => {
-        this.isLoading = false;
-        this.errorMessage = 'Error en verificación facial. Intenta nuevamente.';
-        this.step = 'credentials';
-        console.error('Face verification error:', error);
-      }
-    });
-  }
-
-  onFaceError(message: string): void {
-    this.errorMessage = message;
-    this.isLoading = false;
-  }
-
-  goBack(): void {
-    this.step = 'credentials';
-    this.errorMessage = '';
   }
 }

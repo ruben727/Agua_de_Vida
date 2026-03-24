@@ -7,6 +7,7 @@ import { Avisos } from './pages/avisos/avisos';
 import { Privacidad } from './pages/privacidad/aviso/aviso';
 import { Login } from './auth/login/login';
 import { FaceCapture } from './auth/face-capture/face-capture';
+import { Panel } from './admi/panel/panel';
 
 
 
@@ -18,5 +19,6 @@ export const routes: Routes = [
   { path: 'privacidad', component: Privacidad},
   { path: 'login', component: Login},
   { path: 'registro', component: FaceCapture},
+  { path: 'panel', component: Panel},
 
 ];
