@@ -4,7 +4,7 @@
   "rewrites": [
     {
       "source": "/(.*)",
-      "dest": "/app.html.html"
+      "destination": "/app.html.html"
     }
   ]
 }
