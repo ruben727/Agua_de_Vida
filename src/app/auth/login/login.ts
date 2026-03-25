@@ -18,7 +18,7 @@ export class Login {
   success = signal(false);
   errorMsg = signal('');
 
-  private API_URL = 'http://localhost:3000/api';
+  private API_URL = 'https://adv-backend-two.vercel.app/api';
 
   constructor(private http: HttpClient, private router: Router) {}
 

@@ -1,0 +1,206 @@
+<div class="admin-layout">
+
+  <app-sidebar (collapsedChange)="onSidebarCollapse($event)"></app-sidebar>
+
+  <main class="admin-main" [class.main-collapsed]="sidebarCollapsed">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <h1 class="page-title">Usuarios</h1>
+        <span class="page-breadcrumb">Gestion de cuentas</span>
+      </div>
+      <div class="topbar-right">
+        <button class="btn-primary" (click)="abrirModal()">
+          <svg viewBox="0 0 20 20" fill="currentColor">
+            <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"/>
+          </svg>
+          Nuevo usuario
+        </button>
+      </div>
+    </header>
+
+    <div class="admin-content">
+
+      <!-- Alertas -->
+      @if (successMsg()) {
+        <div class="alert alert-success">
+          <svg viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/>
+          </svg>
+          {{ successMsg() }}
+        </div>
+      }
+
+      @if (errorMsg()) {
+        <div class="alert alert-error">
+          <svg viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
+          </svg>
+          {{ errorMsg() }}
+        </div>
+      }
+
+      <!-- Tabla -->
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-info">
+            <h2 class="table-title">Lista de usuarios</h2>
+            @if (!loading()) {
+              <span class="table-count">{{ usuarios().length }} registros</span>
+            }
+          </div>
+        </div>
+
+        @if (loading()) {
+          <div class="loading-state">
+            <div class="spinner"></div>
+            <p>Cargando usuarios...</p>
+          </div>
+        } @else if (usuarios().length === 0) {
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/>
+            </svg>
+            <p>No hay usuarios registrados</p>
+            <button class="btn-primary" (click)="abrirModal()">Agregar primer usuario</button>
+          </div>
+        } @else {
+          <div class="table-wrap">
+            <table class="tabla">
+              <thead>
+                <tr>
+                  <th>Usuario</th>
+                  <th>Correo</th>
+                  <th>Estado</th>
+                  <th>Registro</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (u of usuarios(); track u.id) {
+                  <tr>
+                    <td>
+                      <div class="user-cell">
+                        <div class="user-avatar">{{ inicialAvatar(u.nombre) }}</div>
+                        <div class="user-info">
+                          <span class="user-nombre">{{ u.nombre }} {{ u.apellidos }}</span>
+                          <span class="user-id">ID {{ u.id }}</span>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <span class="correo-cell">{{ u.correo }}</span>
+                    </td>
+                    <td>
+                      <span class="badge" [class.badge-activo]="u.activo" [class.badge-inactivo]="!u.activo">
+                        {{ u.activo ? 'Activo' : 'Inactivo' }}
+                      </span>
+                    </td>
+                    <td>
+                      <span class="fecha-cell">{{ formatFecha(u.creado_en) }}</span>
+                    </td>
+                    <td>
+                      <div class="actions-cell">
+                        <button
+                          class="btn-icon"
+                          [class.btn-icon-warn]="u.activo"
+                          [class.btn-icon-success]="!u.activo"
+                          [title]="u.activo ? 'Desactivar' : 'Activar'"
+                          (click)="toggleActivo(u)"
+                        >
+                          @if (u.activo) {
+                            <svg viewBox="0 0 20 20" fill="currentColor">
+                              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd"/>
+                            </svg>
+                          } @else {
+                            <svg viewBox="0 0 20 20" fill="currentColor">
+                              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/>
+                            </svg>
+                          }
+                        </button>
+                        <button
+                          class="btn-icon btn-icon-danger"
+                          title="Eliminar"
+                          (click)="eliminarUsuario(u)"
+                        >
+                          <svg viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z" clip-rule="evenodd"/>
+                          </svg>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Modal: Nuevo usuario -->
+@if (modalOpen()) {
+  <div class="modal-backdrop" (click)="cerrarModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+
+      <div class="modal-header">
+        <h3 class="modal-title">Nuevo usuario</h3>
+        <button class="modal-close" (click)="cerrarModal()">
+          <svg viewBox="0 0 20 20" fill="currentColor">
+            <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"/>
+          </svg>
+        </button>
+      </div>
+
+      @if (formError()) {
+        <div class="form-error">
+          <svg viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
+          </svg>
+          {{ formError() }}
+        </div>
+      }
+
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="field">
+            <label class="field-label">Nombre</label>
+            <input class="field-input" type="text" placeholder="Juan" [(ngModel)]="form.nombre"/>
+          </div>
+          <div class="field">
+            <label class="field-label">Apellidos</label>
+            <input class="field-input" type="text" placeholder="Perez Lopez" [(ngModel)]="form.apellidos"/>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Correo electronico</label>
+          <input class="field-input" type="email" placeholder="correo@ejemplo.com" [(ngModel)]="form.correo"/>
+        </div>
+        <div class="field">
+          <label class="field-label">Contrasena</label>
+          <input class="field-input" type="password" placeholder="Minimo 8 caracteres" [(ngModel)]="form.contrasena"/>
+          <span class="field-hint">El usuario podra cambiarla despues.</span>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-secondary" (click)="cerrarModal()" [disabled]="guardando()">
+          Cancelar
+        </button>
+        <button class="btn-primary" (click)="guardarUsuario()" [disabled]="guardando()">
+          @if (guardando()) {
+            <span class="btn-spinner"></span>
+            Guardando...
+          } @else {
+            Crear usuario
+          }
+        </button>
+      </div>
+
+    </div>
+  </div>
+}

@@ -1,0 +1,102 @@
+<!-- Overlay para mobile -->
+<div
+  class="sidebar-overlay"
+  [class.active]="mobileOpen()"
+  (click)="closeMobile()"
+></div>
+
+<!-- Sidebar principal -->
+<aside
+  class="sidebar"
+  [class.collapsed]="collapsed()"
+  [class.mobile-open]="mobileOpen()"
+>
+
+  <!-- Header del sidebar -->
+  <div class="sidebar-header">
+    <div class="sidebar-logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 32 32" fill="none">
+          <path d="M16 4C16 4 8 12 8 18C8 22.4183 11.5817 26 16 26C20.4183 26 24 22.4183 24 18C24 12 16 4 16 4Z" fill="url(#waterGrad)"/>
+          <defs>
+            <linearGradient id="waterGrad" x1="16" y1="4" x2="16" y2="26" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#7dd3fc"/>
+              <stop offset="1" stop-color="#0ea5e9"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      @if (!collapsed()) {
+        <div class="logo-text">
+          <span class="logo-name">Agua de Vida</span>
+          <span class="logo-sub">Panel Admin</span>
+        </div>
+      }
+    </div>
+
+    <!-- Boton colapsar (solo desktop) -->
+    <button class="collapse-btn" (click)="toggleCollapse()" title="Colapsar menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        @if (collapsed()) {
+          <path d="M9 18l6-6-6-6"/>
+        } @else {
+          <path d="M15 18l-6-6 6-6"/>
+        }
+      </svg>
+    </button>
+  </div>
+
+  <!-- Navegacion -->
+  <nav class="sidebar-nav">
+    <ul class="nav-list">
+      @for (item of menuItems; track item.route) {
+        <li class="nav-item">
+          <a
+            [routerLink]="item.route"
+            routerLinkActive="active"
+            class="nav-link"
+            [title]="collapsed() ? item.label : ''"
+            (click)="closeMobile()"
+          >
+            <span class="nav-icon" [innerHTML]="item.icon"></span>
+            @if (!collapsed()) {
+              <span class="nav-label">{{ item.label }}</span>
+            }
+            @if (collapsed()) {
+              <span class="nav-tooltip">{{ item.label }}</span>
+            }
+          </a>
+        </li>
+      }
+    </ul>
+  </nav>
+
+  <!-- Footer del sidebar -->
+  <div class="sidebar-footer">
+    <button class="logout-btn" (click)="logout()" [title]="collapsed() ? 'Cerrar sesion' : ''">
+      <span class="nav-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"/>
+        </svg>
+      </span>
+      @if (!collapsed()) {
+        <span class="nav-label">Cerrar sesion</span>
+      }
+      @if (collapsed()) {
+        <span class="nav-tooltip">Cerrar sesion</span>
+      }
+    </button>
+  </div>
+
+</aside>
+
+<!-- Boton hamburguesa para mobile -->
+<button class="mobile-toggle" (click)="toggleMobile()">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+    @if (mobileOpen()) {
+      <path d="M6 18L18 6M6 6l12 12"/>
+    } @else {
+      <path d="M4 6h16M4 12h16M4 18h16"/>
+    }
+  </svg>
+</button>

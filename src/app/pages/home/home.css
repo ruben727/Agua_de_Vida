@@ -163,18 +163,3 @@
   font-size: 16px;
 }
 
-/* FOOTER */
-.footer {
-  background: #0f172a;
-  color: white;
-  padding: 35px 20px;
-  margin-top: 40px;
-}
-
-.footer-content {
-  max-width: 900px;
-  margin: auto;
-  text-align: center;
-  line-height: 1.8;
-  font-size: 14px;
-}

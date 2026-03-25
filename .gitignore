@@ -5,11 +5,18 @@
 /tmp
 /out-tsc
 /bazel-out
+/dist-ssr
+/dist/server
+/dist/browser
 
 # Node
 /node_modules
 npm-debug.log
 yarn-error.log
+package-lock.json
+yarn.lock
+.npmrc
+.yarnrc
 
 # IDEs and editors
 .idea/
@@ -19,6 +26,7 @@ yarn-error.log
 *.launch
 .settings/
 *.sublime-workspace
+*.sublime-project
 
 # Visual Studio Code
 .vscode/*
@@ -28,16 +36,73 @@ yarn-error.log
 !.vscode/extensions.json
 .history/*
 
-# Miscellaneous
+# Angular specific
+/.angular
 /.angular/cache
-.sass-cache/
-/connect.lock
+/.angular-cli.json
+.angular.json.backup
+*.ngfactory.js
+*.ngsummary.js
+*.ngsummary.json
+*.ngfactory.ts
+
+# Environment files
+.env
+.env.local
+.env.production
+.env.development
+.env.test
+src/environments/environment.prod.ts
+src/environments/environment.ts
+
+# Testing
 /coverage
-/libpeerconnection.log
-testem.log
+/coverage/*
+/testem.log
 /typings
 __screenshots__/
+karma.conf.js
+/.karma
+
+# Vercel
+/.vercel
+.vercel
+.vercel_cache
 
 # System files
 .DS_Store
 Thumbs.db
+*.swp
+*.swo
+*~
+*.bak
+*.log
+
+# Debug files
+*.pid
+*.seed
+*.pid.lock
+
+# Optional: Keep the package.json but ignore lock files if you want Vercel to generate them
+# package-lock.json
+# yarn.lock
+
+# Build tools
+/.tmp
+/.temp
+/tmp
+/dist
+
+# Angular CLI cache
+/.ngcache
+
+# TurboRepo
+.turbo
+
+# Storybook
+/storybook-static
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose*.yml

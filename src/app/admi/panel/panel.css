@@ -1,0 +1,320 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Nunito:wght@400;500;600;700&display=swap');
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: #eef2f7;
+}
+
+/* Layout */
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #eef2f7;
+}
+
+/* Main — margen fijo igual al ancho del sidebar */
+.admin-main {
+  margin-left: 240px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-width: 0;
+  transition: margin-left 0.28s cubic-bezier(0.4,0,0.2,1);
+}
+
+.admin-main.main-collapsed {
+  margin-left: 68px;
+}
+
+/* Topbar */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: #0f2744;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  box-shadow: 0 2px 12px rgba(15,39,68,0.35);
+  flex-shrink: 0;
+}
+
+.topbar-left { display: flex; flex-direction: column; }
+
+.page-title {
+  font-family: 'Cinzel', serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.1;
+  letter-spacing: 0.04em;
+}
+
+.page-breadcrumb {
+  font-size: 11px;
+  color: rgba(255,255,255,0.45);
+  margin-top: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+/* User badge */
+.user-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1e4976, #1e7eb8);
+  color: #ffffff;
+  font-family: 'Cinzel', serif;
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(78,168,216,0.5);
+  flex-shrink: 0;
+}
+
+.user-info { display: flex; flex-direction: column; }
+
+.user-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.1;
+}
+
+.user-role {
+  font-size: 10px;
+  color: #4ea8d8;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+}
+
+/* Contenido */
+.admin-content {
+  flex: 1;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* Welcome card */
+.welcome-card {
+  background: linear-gradient(135deg, #0f2744 0%, #1a3a5c 55%, #1e6aa8 100%);
+  border-radius: 16px;
+  padding: 32px 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  color: #ffffff;
+  box-shadow: 0 6px 30px rgba(15,39,68,0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.welcome-card::before {
+  content: '';
+  position: absolute;
+  top: -50px; right: -50px;
+  width: 220px; height: 220px;
+  border-radius: 50%;
+  background: rgba(78,168,216,0.08);
+}
+
+.welcome-text { position: relative; z-index: 1; }
+
+.welcome-text h2 {
+  font-family: 'Cinzel', serif;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  letter-spacing: 0.02em;
+}
+
+.welcome-text p {
+  font-size: 14px;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.5;
+}
+
+.welcome-verse {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  max-width: 280px;
+  position: relative;
+  z-index: 1;
+}
+
+.verse-text {
+  font-size: 13px;
+  color: rgba(255,255,255,0.75);
+  font-style: italic;
+  line-height: 1.7;
+  margin-bottom: 6px;
+}
+
+.verse-ref {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  color: #7dd3fc;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+/* Seccion titulo */
+.section-title {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: #6b8aa8;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 14px;
+  padding-left: 2px;
+}
+
+/* Quick grid */
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.quick-card {
+  background: #ffffff;
+  border: 1px solid #d0dfe9;
+  border-radius: 14px;
+  padding: 20px 22px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  transition: box-shadow 0.2s, border-color 0.2s, transform 0.15s;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.quick-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 4px; height: 100%;
+  background: #0f2744;
+  opacity: 0;
+  transition: opacity 0.2s;
+  border-radius: 14px 0 0 14px;
+}
+
+.quick-card:hover {
+  border-color: #4ea8d8;
+  box-shadow: 0 6px 24px rgba(15,39,68,0.12);
+  transform: translateY(-3px);
+}
+.quick-card:hover::before { opacity: 1; }
+
+.quick-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #eef2f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #0f2744;
+  border: 1px solid #d0dfe9;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.quick-icon svg { width: 22px; height: 22px; }
+.quick-card:hover .quick-icon {
+  background: #0f2744;
+  color: #ffffff;
+  border-color: #0f2744;
+}
+
+.quick-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.quick-label {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f2744;
+}
+
+.quick-desc {
+  font-size: 12px;
+  color: #6b8aa8;
+  line-height: 1.4;
+}
+
+.quick-arrow {
+  width: 18px;
+  height: 18px;
+  color: #d0dfe9;
+  flex-shrink: 0;
+  transition: color 0.18s, transform 0.18s;
+}
+.quick-card:hover .quick-arrow {
+  color: #4ea8d8;
+  transform: translateX(4px);
+}
+
+/* Loading */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 80px 0;
+  color: #6b8aa8;
+  font-size: 14px;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #d0dfe9;
+  border-top-color: #0f2744;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-main { margin-left: 0 !important; }
+  .topbar { padding-left: 68px; }
+  .admin-content { padding: 16px; }
+  .welcome-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 24px;
+  }
+  .welcome-verse { align-items: flex-start; text-align: left; max-width: 100%; }
+  .quick-grid { grid-template-columns: 1fr; }
+}
