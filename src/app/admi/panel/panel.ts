@@ -25,7 +25,8 @@ export class Panel implements OnInit {
       this.token = params['token'];
       if (this.token) {
         localStorage.setItem('admin_token', this.token);
-        this.router.navigate(['/admin/panel'], { replaceUrl: true });
+        // SOLO CAMBIÉ ESTA LÍNEA: eliminé { replaceUrl: true } para conservar el token en la URL
+        this.router.navigate(['/admin/panel']);
         this.getUserData();
       } else {
         const savedToken = localStorage.getItem('admin_token');
