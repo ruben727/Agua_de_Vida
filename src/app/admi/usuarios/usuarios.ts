@@ -9,8 +9,9 @@ interface Usuario {
   nombre: string;
   apellidos: string;
   correo: string;
-  activo: boolean;
-  creado_en: string;
+  activo?: boolean;  // Opcional si no existe en la BD
+  created_at?: string;
+  creado_en?: string;
 }
 
 @Component({
@@ -61,20 +62,41 @@ export class Usuarios implements OnInit {
 
   cargarUsuarios() {
     this.loading.set(true);
+    this.errorMsg.set('');
+    
     fetch(`${this.API}/usuarios`, {
       headers: { 'Authorization': `Bearer ${this.token}` }
     })
     .then(r => {
-      if (!r.ok) throw new Error('No autorizado');
+      if (r.status === 401) {
+        localStorage.removeItem('admin_token');
+        this.router.navigate(['/login']);
+        throw new Error('Sesión expirada');
+      }
+      if (!r.ok) throw new Error('Error al cargar usuarios');
       return r.json();
     })
     .then(data => {
-      this.usuarios.set(data.usuarios);
+      // El backend devuelve directamente el array de usuarios
+      const usuariosData = Array.isArray(data) ? data : data.usuarios || [];
+      
+      // Mapear los datos para asegurar que tienen la estructura correcta
+      const usuariosFormateados = usuariosData.map((u: any) => ({
+        id: u.id,
+        nombre: u.nombre,
+        apellidos: u.apellidos || '',
+        correo: u.correo,
+        activo: u.activo !== undefined ? u.activo : true,
+        creado_en: u.created_at || u.creado_en || new Date().toISOString()
+      }));
+      
+      this.usuarios.set(usuariosFormateados);
       this.loading.set(false);
     })
-    .catch(() => {
+    .catch((error) => {
+      console.error('Error cargando usuarios:', error);
       this.loading.set(false);
-      this.errorMsg.set('Error al cargar los usuarios.');
+      this.errorMsg.set(error.message || 'Error al cargar los usuarios.');
     });
   }
 
@@ -89,12 +111,18 @@ export class Usuarios implements OnInit {
   }
 
   guardarUsuario() {
-    if (!this.form.nombre || !this.form.apellidos || !this.form.correo || !this.form.contrasena) {
-      this.formError.set('Todos los campos son requeridos.');
+    if (!this.form.nombre || !this.form.correo || !this.form.contrasena) {
+      this.formError.set('Nombre, correo y contraseña son obligatorios.');
       return;
     }
-    if (this.form.contrasena.length < 8) {
-      this.formError.set('La contraseña debe tener al menos 8 caracteres.');
+    
+    if (this.form.contrasena.length < 6) {
+      this.formError.set('La contraseña debe tener al menos 6 caracteres.');
+      return;
+    }
+
+    if (!this.form.correo.includes('@')) {
+      this.formError.set('Ingresa un correo electrónico válido.');
       return;
     }
 
@@ -109,60 +137,44 @@ export class Usuarios implements OnInit {
       },
       body: JSON.stringify(this.form)
     })
-    .then(r => r.json().then(data => ({ status: r.status, data })))
-    .then(({ status, data }) => {
-      this.guardando.set(false);
-      if (status === 201) {
-        this.cerrarModal();
-        this.mostrarExito('Usuario creado exitosamente.');
-        this.cargarUsuarios();
-      } else {
-        this.formError.set(data.message || 'Error al crear el usuario.');
-      }
+    .then(async r => {
+      const data = await r.json();
+      if (!r.ok) throw new Error(data.message || 'Error al crear usuario');
+      return data;
     })
-    .catch(() => {
+    .then(() => {
       this.guardando.set(false);
-      this.formError.set('Error de conexión con el servidor.');
+      this.cerrarModal();
+      this.mostrarExito('Usuario creado exitosamente.');
+      this.cargarUsuarios(); // Recargar la lista
+    })
+    .catch((error) => {
+      this.guardando.set(false);
+      this.formError.set(error.message || 'Error de conexión con el servidor.');
     });
   }
 
-  toggleActivo(usuario: Usuario) {
-    const nuevoEstado = !usuario.activo;
-    fetch(`${this.API}/usuarios/${usuario.id}/activo`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.token}`
-      },
-      body: JSON.stringify({ activo: nuevoEstado })
-    })
-    .then(r => r.json())
-    .then(() => {
-      this.usuarios.update(list =>
-        list.map(u => u.id === usuario.id ? { ...u, activo: nuevoEstado } : u)
-      );
-      this.mostrarExito(`Usuario ${nuevoEstado ? 'activado' : 'desactivado'}.`);
-    })
-    .catch(() => this.errorMsg.set('Error al actualizar el usuario.'));
-  }
-
+  // Método para eliminar usuario
   eliminarUsuario(usuario: Usuario) {
-    if (!confirm(`¿Seguro que deseas eliminar a ${usuario.nombre} ${usuario.apellidos}?`)) return;
+    if (!confirm(`¿Seguro que deseas eliminar a ${usuario.nombre} ${usuario.apellidos || ''}?`)) return;
 
     fetch(`${this.API}/usuarios/${usuario.id}`, {
       method: 'DELETE',
       headers: { 'Authorization': `Bearer ${this.token}` }
     })
-    .then(r => r.json().then(data => ({ status: r.status, data })))
-    .then(({ status, data }) => {
-      if (status === 200) {
-        this.usuarios.update(list => list.filter(u => u.id !== usuario.id));
-        this.mostrarExito(data.message);
-      } else {
-        this.errorMsg.set(data.message);
-      }
+    .then(async r => {
+      const data = await r.json();
+      if (!r.ok) throw new Error(data.message || 'Error al eliminar');
+      return data;
     })
-    .catch(() => this.errorMsg.set('Error al eliminar el usuario.'));
+    .then(() => {
+      this.usuarios.update(list => list.filter(u => u.id !== usuario.id));
+      this.mostrarExito('Usuario eliminado correctamente.');
+    })
+    .catch((error) => {
+      this.errorMsg.set(error.message || 'Error al eliminar el usuario.');
+      setTimeout(() => this.errorMsg.set(''), 3000);
+    });
   }
 
   mostrarExito(msg: string) {
@@ -172,9 +184,16 @@ export class Usuarios implements OnInit {
   }
 
   formatFecha(fecha: string): string {
-    return new Date(fecha).toLocaleDateString('es-MX', {
-      day: '2-digit', month: 'short', year: 'numeric'
-    });
+    if (!fecha) return 'N/A';
+    try {
+      return new Date(fecha).toLocaleDateString('es-MX', {
+        day: '2-digit', 
+        month: 'short', 
+        year: 'numeric'
+      });
+    } catch {
+      return 'Fecha inválida';
+    }
   }
 
   inicialAvatar(nombre: string): string {
