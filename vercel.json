@@ -1,10 +1,11 @@
+
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist/<nombre-de-tu-app>/browser",
+  "buildCommand": "ng build --configuration production",
+  "outputDirectory": "dist/ADV2",
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "/app.html.html"
+      "destination": "/index.html"
     }
   ]
 }
