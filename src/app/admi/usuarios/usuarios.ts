@@ -177,6 +177,44 @@ export class Usuarios implements OnInit {
     });
   }
 
+  // MÉTODO TOGGLE ACTIVO AGREGADO
+  toggleActivo(usuario: Usuario) {
+    const nuevoEstado = !usuario.activo;
+    
+    // Actualizar localmente primero para mejor experiencia de usuario
+    this.usuarios.update(list =>
+      list.map(u => u.id === usuario.id ? { ...u, activo: nuevoEstado } : u)
+    );
+    
+    // Mostrar mensaje de éxito temporal
+    this.mostrarExito(`Usuario ${nuevoEstado ? 'activado' : 'desactivado'} correctamente.`);
+    
+    // Aquí deberías llamar a tu API si tienes el endpoint
+    // Por ahora solo actualiza localmente porque tu backend no tiene el campo activo
+    /*
+    fetch(`${this.API}/usuarios/${usuario.id}/activo`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.token}`
+      },
+      body: JSON.stringify({ activo: nuevoEstado })
+    })
+    .then(r => {
+      if (!r.ok) throw new Error('Error al actualizar');
+      return r.json();
+    })
+    .catch(() => {
+      // Revertir si hay error
+      this.usuarios.update(list =>
+        list.map(u => u.id === usuario.id ? { ...u, activo: !nuevoEstado } : u)
+      );
+      this.errorMsg.set('Error al actualizar el usuario.');
+      setTimeout(() => this.errorMsg.set(''), 3000);
+    });
+    */
+  }
+
   mostrarExito(msg: string) {
     this.successMsg.set(msg);
     this.errorMsg.set('');
