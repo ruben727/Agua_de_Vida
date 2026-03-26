@@ -62,6 +62,19 @@ export class Panel implements OnInit {
     });
   }
 
+  // Método para descargar la guía de estilos
+  downloadStyleGuide() {
+    const pdfUrl = '/Guíaestilosadv.pdf';
+    
+    // Crear un enlace temporal para forzar la descarga
+    const link = document.createElement('a');
+    link.href = pdfUrl;
+    link.download = 'Guíaestilosadv.pdf'; // Nombre con el que se descargará
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   logout() {
     localStorage.removeItem('admin_token');
     this.router.navigate(['/login']);

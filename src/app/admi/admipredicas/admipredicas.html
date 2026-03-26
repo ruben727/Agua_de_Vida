@@ -1,0 +1,208 @@
+<div class="admin-layout">
+  <app-sidebar (collapsedChange)="onSidebarCollapse($event)"></app-sidebar>
+
+  <main class="admin-main" [class.main-collapsed]="sidebarCollapsed">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <h1 class="page-title">Prédicas</h1>
+        <span class="page-breadcrumb">Gestión de prédicas</span>
+      </div>
+      <div class="topbar-right">
+        <button class="btn-primary" (click)="abrirModal()">
+          <svg viewBox="0 0 20 20" fill="currentColor">
+            <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"/>
+          </svg>
+          Nueva prédica
+        </button>
+      </div>
+    </header>
+
+    <div class="admin-content">
+
+      <!-- Alertas -->
+      @if (successMsg()) {
+        <div class="alert alert-success">
+          <svg viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/>
+          </svg>
+          {{ successMsg() }}
+        </div>
+      }
+
+      @if (errorMsg()) {
+        <div class="alert alert-error">
+          <svg viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
+          </svg>
+          {{ errorMsg() }}
+        </div>
+      }
+
+      <!-- Tabla -->
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-info">
+            <h2 class="table-title">Lista de prédicas</h2>
+            @if (!loading()) {
+              <span class="table-count">{{ predicas().length }} registros</span>
+            }
+          </div>
+        </div>
+
+        @if (loading()) {
+          <div class="loading-state">
+            <div class="spinner"></div>
+            <p>Cargando prédicas...</p>
+          </div>
+        } @else if (predicas().length === 0) {
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125M3.375 19.5h7.5c.621 0 1.125-.504 1.125-1.125m-9.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-7.5A1.125 1.125 0 0112 18.375m9.75-12.75c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125m19.5 0v1.5c0 .621-.504 1.125-1.125 1.125M2.25 5.625v1.5c0 .621.504 1.125 1.125 1.125m0 0h17.25m-17.25 0h7.5c.621 0 1.125.504 1.125 1.125M3.375 8.25c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375z"/>
+            </svg>
+            <p>No hay prédicas registradas</p>
+            <button class="btn-primary" (click)="abrirModal()">Agregar primera prédica</button>
+          </div>
+        } @else {
+          <div class="table-wrap">
+            <table class="tabla">
+              <thead>
+                <tr>
+                  <th>Imagen</th>
+                  <th>Título</th>
+                  <th>Predicador</th>
+                  <th>Fecha</th>
+                  <th>YouTube</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (p of predicas(); track p.id) {
+                  <tr>
+                    <td>
+                      <img [src]="p.imagen_url" [alt]="p.titulo" class="predica-thumb"/>
+                    </td>
+                    <td>
+                      <span class="predica-titulo">{{ p.titulo }}</span>
+                    </td>
+                    <td>
+                      <span class="predica-predicador">{{ p.predicador }}</span>
+                    </td>
+                    <td>
+                      <span class="fecha-cell">{{ formatFecha(p.fecha) }}</span>
+                    </td>
+                    <td>
+                      <a [href]="p.youtube_url" target="_blank" class="btn-yt">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                        </svg>
+                        Ver video
+                      </a>
+                    </td>
+                    <td>
+                      <div class="actions-cell">
+                        <button
+                          class="btn-icon btn-icon-danger"
+                          title="Eliminar"
+                          (click)="eliminarPredica(p)"
+                        >
+                          <svg viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z" clip-rule="evenodd"/>
+                          </svg>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Modal: Nueva prédica -->
+@if (modalOpen()) {
+  <div class="modal-backdrop" (click)="cerrarModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+
+      <div class="modal-header">
+        <h3 class="modal-title">Nueva prédica</h3>
+        <button class="modal-close" (click)="cerrarModal()">
+          <svg viewBox="0 0 20 20" fill="currentColor">
+            <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"/>
+          </svg>
+        </button>
+      </div>
+
+      @if (formError()) {
+        <div class="form-error">
+          <svg viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
+          </svg>
+          {{ formError() }}
+        </div>
+      }
+
+      <div class="modal-body">
+
+        <div class="field">
+          <label class="field-label">Título</label>
+          <input class="field-input" type="text" placeholder="Ej: No te amargues en el proceso" [(ngModel)]="form.titulo"/>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Predicador</label>
+          <input class="field-input" type="text" placeholder="Ej: Ps. Clemente Resendiz" [(ngModel)]="form.predicador"/>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Fecha de la prédica</label>
+          <input class="field-input" type="date" [(ngModel)]="form.fecha"/>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Link de YouTube</label>
+          <input class="field-input" type="url" placeholder="https://youtube.com/watch?v=..." [(ngModel)]="form.youtube_url"/>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Imagen de portada</label>
+          <div class="image-upload-area" (click)="fileInput.click()">
+            @if (imagenPreview()) {
+              <img [src]="imagenPreview()" alt="Preview" class="image-preview"/>
+            } @else {
+              <div class="image-placeholder">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/>
+                </svg>
+                <p>Haz clic para seleccionar una imagen</p>
+                <span>JPG, PNG — máx 5MB</span>
+              </div>
+            }
+          </div>
+          <input #fileInput type="file" accept="image/*" style="display:none" (change)="onImagenSeleccionada($event)"/>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-secondary" (click)="cerrarModal()" [disabled]="guardando()">
+          Cancelar
+        </button>
+        <button class="btn-primary" (click)="guardarPredica()" [disabled]="guardando() || subiendoImagen()">
+          @if (guardando() || subiendoImagen()) {
+            <span class="btn-spinner"></span>
+            {{ subiendoImagen() ? 'Subiendo imagen...' : 'Guardando...' }}
+          } @else {
+            Crear prédica
+          }
+        </button>
+      </div>
+
+    </div>
+  </div>
+}

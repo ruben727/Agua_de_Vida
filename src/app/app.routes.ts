@@ -9,6 +9,7 @@ import { Login } from './auth/login/login';
 import { FaceCapture } from './auth/face-capture/face-capture';
 import { Panel } from './admi/panel/panel';
 import { Usuarios } from './admi/usuarios/usuarios';
+import { AdminPredicas } from './admi/admipredicas/admipredicas';
 
 
 
@@ -22,5 +23,6 @@ export const routes: Routes = [
   { path: 'registro', component: FaceCapture},
   { path: 'admin/panel', component: Panel},
   { path: 'admin/usuarios', component: Usuarios},
+  { path: 'admin/predicas', component: AdminPredicas},
 
 ];
