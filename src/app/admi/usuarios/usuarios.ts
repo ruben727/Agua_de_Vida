@@ -9,9 +9,8 @@ interface Usuario {
   nombre: string;
   apellidos: string;
   correo: string;
-  activo?: boolean;  // Opcional si no existe en la BD
-  created_at?: string;
-  creado_en?: string;
+  activo: boolean;
+  creado_en: string;
 }
 
 @Component({
@@ -28,7 +27,6 @@ export class Usuarios implements OnInit {
   successMsg = signal('');
   sidebarCollapsed = false;
 
-  // Modal agregar
   modalOpen = signal(false);
   guardando = signal(false);
   formError = signal('');
@@ -63,7 +61,7 @@ export class Usuarios implements OnInit {
   cargarUsuarios() {
     this.loading.set(true);
     this.errorMsg.set('');
-    
+
     fetch(`${this.API}/usuarios`, {
       headers: { 'Authorization': `Bearer ${this.token}` }
     })
@@ -77,24 +75,23 @@ export class Usuarios implements OnInit {
       return r.json();
     })
     .then(data => {
-      // El backend devuelve directamente el array de usuarios
-      const usuariosData = Array.isArray(data) ? data : data.usuarios || [];
-      
-      // Mapear los datos para asegurar que tienen la estructura correcta
-      const usuariosFormateados = usuariosData.map((u: any) => ({
+      const usuariosData = Array.isArray(data) ? data : [];
+
+      const usuariosFormateados: Usuario[] = usuariosData.map((u: any) => ({
         id: u.id,
-        nombre: u.nombre,
+        nombre: u.nombre || '',
         apellidos: u.apellidos || '',
-        correo: u.correo,
+        correo: u.correo || '',
         activo: u.activo !== undefined ? u.activo : true,
-        creado_en: u.created_at || u.creado_en || new Date().toISOString()
+        creado_en: u.creado_en || new Date().toISOString()
       }));
-      
+
       this.usuarios.set(usuariosFormateados);
       this.loading.set(false);
     })
     .catch((error) => {
       console.error('Error cargando usuarios:', error);
+      this.usuarios.set([]);
       this.loading.set(false);
       this.errorMsg.set(error.message || 'Error al cargar los usuarios.');
     });
@@ -115,7 +112,7 @@ export class Usuarios implements OnInit {
       this.formError.set('Nombre, correo y contraseña son obligatorios.');
       return;
     }
-    
+
     if (this.form.contrasena.length < 6) {
       this.formError.set('La contraseña debe tener al menos 6 caracteres.');
       return;
@@ -146,7 +143,7 @@ export class Usuarios implements OnInit {
       this.guardando.set(false);
       this.cerrarModal();
       this.mostrarExito('Usuario creado exitosamente.');
-      this.cargarUsuarios(); // Recargar la lista
+      this.cargarUsuarios();
     })
     .catch((error) => {
       this.guardando.set(false);
@@ -154,9 +151,8 @@ export class Usuarios implements OnInit {
     });
   }
 
-  // Método para eliminar usuario
   eliminarUsuario(usuario: Usuario) {
-    if (!confirm(`¿Seguro que deseas eliminar a ${usuario.nombre} ${usuario.apellidos || ''}?`)) return;
+    if (!confirm(`¿Seguro que deseas eliminar a ${usuario.nombre} ${usuario.apellidos}?`)) return;
 
     fetch(`${this.API}/usuarios/${usuario.id}`, {
       method: 'DELETE',
@@ -177,42 +173,14 @@ export class Usuarios implements OnInit {
     });
   }
 
-  // MÉTODO TOGGLE ACTIVO AGREGADO
   toggleActivo(usuario: Usuario) {
     const nuevoEstado = !usuario.activo;
-    
-    // Actualizar localmente primero para mejor experiencia de usuario
+
     this.usuarios.update(list =>
       list.map(u => u.id === usuario.id ? { ...u, activo: nuevoEstado } : u)
     );
-    
-    // Mostrar mensaje de éxito temporal
+
     this.mostrarExito(`Usuario ${nuevoEstado ? 'activado' : 'desactivado'} correctamente.`);
-    
-    // Aquí deberías llamar a tu API si tienes el endpoint
-    // Por ahora solo actualiza localmente porque tu backend no tiene el campo activo
-    /*
-    fetch(`${this.API}/usuarios/${usuario.id}/activo`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.token}`
-      },
-      body: JSON.stringify({ activo: nuevoEstado })
-    })
-    .then(r => {
-      if (!r.ok) throw new Error('Error al actualizar');
-      return r.json();
-    })
-    .catch(() => {
-      // Revertir si hay error
-      this.usuarios.update(list =>
-        list.map(u => u.id === usuario.id ? { ...u, activo: !nuevoEstado } : u)
-      );
-      this.errorMsg.set('Error al actualizar el usuario.');
-      setTimeout(() => this.errorMsg.set(''), 3000);
-    });
-    */
   }
 
   mostrarExito(msg: string) {
@@ -225,8 +193,8 @@ export class Usuarios implements OnInit {
     if (!fecha) return 'N/A';
     try {
       return new Date(fecha).toLocaleDateString('es-MX', {
-        day: '2-digit', 
-        month: 'short', 
+        day: '2-digit',
+        month: 'short',
         year: 'numeric'
       });
     } catch {
