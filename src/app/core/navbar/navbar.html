@@ -39,8 +39,7 @@
 
 </nav>
 
-
-<!-- BUSCADOR -->
+<!-- BUSCADOR CON ELASTICSEARCH -->
 <div class="search-overlay" *ngIf="showSearch">
 
   <div class="search-container">
@@ -61,12 +60,11 @@
 
     </div>
 
-
     <div class="search-box">
 
       <input
         type="text"
-        placeholder="Buscar..."
+        placeholder="Buscar sermones, eventos, avisos..."
         [(ngModel)]="searchQuery"
         (keyup)="performSearch()"
         #searchInput
@@ -79,21 +77,48 @@
 
     </div>
 
+    <!-- INDICADOR DE CARGA -->
+    <div class="loading-indicator" *ngIf="isLoading">
+      <div class="spinner"></div>
+      <span>Buscando en Elasticsearch...</span>
+    </div>
 
-    <!-- RESULTADOS -->
-
+    <!-- RESULTADOS DE BÚSQUEDA -->
     <div class="search-results">
 
-      <div *ngIf="results.length === 0 && searchQuery.length > 2">
-        No se encontraron resultados
+      <!-- Sin resultados -->
+      <div *ngIf="!isLoading && results.length === 0 && searchQuery.length > 2" class="no-results">
+        <div class="no-results-icon">🔍</div>
+        <div class="no-results-text">No se encontraron resultados para "{{searchQuery}}"</div>
+        <div class="no-results-suggestion">Intenta con otras palabras clave</div>
       </div>
 
+      <!-- Mostrar resultados -->
       <div
-        class="result"
-        *ngFor="let r of results"
-        (click)="goTo(r.route)"
+        class="result-item"
+        *ngFor="let result of results"
+        (click)="goTo(result.route)"
       >
-        {{r.title}}
+        <div class="result-title">
+          <span class="result-icon">
+            {{ getRouteIcon(result.route) }}
+          </span>
+          {{ result.title }}
+        </div>
+        <div class="result-score" *ngIf="result.score">
+          Relevancia: {{ result.score | number:'1.0-0' }}%
+        </div>
+        <div class="result-keywords" *ngIf="result.matchedTerms">
+          <span *ngFor="let term of result.matchedTerms" class="keyword-tag">
+            {{ term }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Sugerencia para búsquedas cortas -->
+      <div *ngIf="!isLoading && searchQuery.length > 0 && searchQuery.length <= 2" class="search-hint">
+        <div class="hint-icon"></div>
+        <div>Escribe al menos 3 caracteres para buscar</div>
       </div>
 
     </div>
@@ -101,7 +126,6 @@
   </div>
 
 </div>
-
 
 <!-- SIDEBAR -->
 <div class="sidebar-overlay" *ngIf="showSidebar" (click)="closeSidebar()"></div>
@@ -124,62 +148,60 @@
 
   </div>
 
-<div class="sidebar-content">
+  <div class="sidebar-content">
 
-  <div class="sidebar-section">
+    <div class="sidebar-section">
 
-    <h3>BIBLIAS</h3>
+      <h3>BIBLIAS</h3>
 
-    <div class="sidebar-links">
+      <div class="sidebar-links">
 
-      <a href="https://www.biblegateway.com/versions/Nueva-Traduccion-Viviente-Biblia-NTV/" target="_blank">
-        Biblia NTV
-      </a>
+        <a href="https://www.biblegateway.com/versions/Nueva-Traduccion-Viviente-Biblia-NTV/" target="_blank">
+          Biblia NTV
+        </a>
 
-      <a href="https://www.bible.com/es/bible/149/GEN.1.RVR1960" target="_blank">
-        Reina Valera
-      </a>
+        <a href="https://www.bible.com/es/bible/149/GEN.1.RVR1960" target="_blank">
+          Reina Valera
+        </a>
 
-      <a href="https://www.biblegateway.com/versions/Traducci%C3%B3n-en-lenguaje-actual-TLA-Biblia/" target="_blank">
-        Traducción Lenguaje Actual
-      </a>
+        <a href="https://www.biblegateway.com/versions/Traducci%C3%B3n-en-lenguaje-actual-TLA-Biblia/" target="_blank">
+          Traducción Lenguaje Actual
+        </a>
+
+      </div>
+
+    </div>
+
+    <!-- IGLESIAS -->
+    <div class="sidebar-section">
+
+      <h3>IGLESIAS DE LA RED</h3>
+
+      <div class="sidebar-links">
+
+        <a href="https://cornerstonequeretaro.com/" target="_blank">
+          Cornestone Querétaro
+        </a>
+
+      </div>
+
+    </div>
+
+    <br><br>
+    
+    <!-- OTROS -->
+    <div class="sidebar-section">
+
+      <div class="sidebar-links">
+
+        <a href="login" target="_blank">
+          Inicio de sesión
+        </a>
+
+      </div>
 
     </div>
 
   </div>
 
-
-  <!-- IGLESIAS -->
-  <div class="sidebar-section">
-
-    <h3>IGLESIAS DE LA RED</h3>
-
-    <div class="sidebar-links">
-
-      <a href="https://cornerstonequeretaro.com/" target="_blank">
-        Cornestone Querétaro
-      </a>
-
-
-    </div>
-
-  </div>
-
-<br><br>
-  <!-- OTROS -->
-  <div class="sidebar-section">
-
-   
-
-    <div class="sidebar-links">
-
-      <a href="login" target="_blank">
-        Inicio de sesión
-      </a>
-
-    </div>
-
-  </div>
-
-</div>
 </div>

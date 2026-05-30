@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ElasticsearchService } from '../../services/elasticsearch.service';
 
 @Component({
   selector: 'app-navbar',
@@ -17,74 +18,78 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './navbar.css'
 })
 export class NavbarComponent {
-
-  constructor(private router: Router){}
-
-  @ViewChild('searchInput') searchInput?: ElementRef;
-
   showSearch = false;
   showSidebar = false;
   searchQuery = '';
-  results:any[] = [];
+  results: any[] = [];
+  isLoading = false;
 
-  pages = [
-    { title:'Inicio', route:'/', keywords:['inicio','iglesia'] },
-    { title:'Predicas', route:'/predicas', keywords:['predicas','sermon'] },
-    { title:'Avisos', route:'/avisos', keywords:['avisos','eventos'] },
-    { title:'Contacto', route:'/contacto', keywords:['contacto','telefono','correo'] }
-  ];
-
-  openSearch(){
-
-    this.showSearch = true;
-
-    setTimeout(()=>{
-      this.searchInput?.nativeElement?.focus();
-    },200);
-
+  constructor(
+    private router: Router,
+    private elasticsearchService: ElasticsearchService
+  ) {
+    console.log('NavbarComponent inicializado');
   }
 
-  closeSearch(){
+  @ViewChild('searchInput') searchInput?: ElementRef;
 
+  // Método para obtener ícono según la ruta
+  getRouteIcon(route: string): string {
+    switch(route) {
+      case '/': return '';
+      case '/predicas': return '';
+      case '/avisos': return '';
+      case '/contacto': return '';
+      default: return '🔍';
+    }
+  }
+
+  openSearch() {
+    this.showSearch = true;
+    setTimeout(() => {
+      if (this.searchInput?.nativeElement) {
+        this.searchInput.nativeElement.focus();
+      }
+    }, 200);
+  }
+
+  closeSearch() {
     this.showSearch = false;
     this.searchQuery = '';
     this.results = [];
-
   }
 
-  performSearch(){
-
-    const q = this.searchQuery.toLowerCase();
-
-    if(q.length < 2){
+  async performSearch() {
+    const q = this.searchQuery.trim();
+    
+    if (q.length < 2) {
       this.results = [];
       return;
     }
-
-    this.results = this.pages.filter(p =>
-      p.title.toLowerCase().includes(q) ||
-      p.keywords.some(k => k.includes(q))
-    );
-
+    
+    this.isLoading = true;
+    
+    try {
+      this.results = await this.elasticsearchService.search(q);
+      console.log('Resultados:', this.results);
+    } catch (error) {
+      console.error('Error en búsqueda:', error);
+      this.results = [];
+    } finally {
+      this.isLoading = false;
+    }
   }
 
-  goTo(route:string){
-
+  goTo(route: string) {
     this.router.navigate([route]);
     this.closeSearch();
-
   }
 
-  toggleSidebar(){
-
+  toggleSidebar() {
     this.showSidebar = !this.showSidebar;
-
   }
 
-  closeSidebar(){
-
+  closeSidebar() {
     this.showSidebar = false;
-
   }
-
 }
