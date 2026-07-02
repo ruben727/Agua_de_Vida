@@ -180,14 +180,6 @@
 
 /* INPUT BUSCADOR */
 
-.search-box {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  border-bottom: 2px solid #444;
-  padding: 12px 0;
-}
-
 .search-box input {
   flex: 1;
   background: transparent;
@@ -201,29 +193,242 @@
   color: rgba(255,255,255,.4);
 }
 
+/* BUSCADOR CON ICONO */
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border-bottom: 2px solid #444;
+  padding: 12px 0;
+}
+
 .search-icon {
   width: 24px;
   height: 24px;
-  stroke: white;
+  stroke: rgba(255,255,255,.5);
   fill: none;
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+
+.clear-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: rgba(255,255,255,.4);
+  display: flex;
+  align-items: center;
+  transition: color .2s;
+  flex-shrink: 0;
+}
+
+.clear-btn:hover {
+  color: white;
+}
+
+.clear-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
+/* LOADING */
+
+.loading-indicator {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 0;
+  color: rgba(255,255,255,.6);
+  font-size: 14px;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(77,201,230,.3);
+  border-top-color: #4dc9e6;
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 /* RESULTADOS */
 
 .search-results {
-  margin-top: 30px;
+  margin-top: 20px;
   color: white;
 }
 
-.result {
-  padding: 12px;
-  border-bottom: 1px solid rgba(255,255,255,.1);
-  cursor: pointer;
-  transition: .2s;
+.results-header {
+  font-size: 13px;
+  color: rgba(255,255,255,.5);
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
 }
 
-.result:hover {
+.results-header strong {
+  color: rgba(255,255,255,.8);
+}
+
+/* CARD DE RESULTADO */
+
+.result-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background .2s;
+  border: 1px solid transparent;
+  margin-bottom: 6px;
+}
+
+.result-item:hover {
   background: rgba(255,255,255,.05);
+  border-color: rgba(77,201,230,.2);
+}
+
+.result-left {
+  font-size: 20px;
+  padding-top: 2px;
+  flex-shrink: 0;
+}
+
+.result-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.result-header-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+/* BADGES DE TIPO */
+
+.result-badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .8px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  text-transform: uppercase;
+}
+
+.badge-predica {
+  background: rgba(77,201,230,.15);
+  color: #4dc9e6;
+  border: 1px solid rgba(77,201,230,.3);
+}
+
+.badge-aviso {
+  background: rgba(255,193,7,.12);
+  color: #ffc107;
+  border: 1px solid rgba(255,193,7,.3);
+}
+
+.badge-pagina {
+  background: rgba(255,255,255,.08);
+  color: rgba(255,255,255,.6);
+  border: 1px solid rgba(255,255,255,.15);
+}
+
+.result-score {
+  font-size: 11px;
+  color: rgba(255,255,255,.35);
+  margin-left: auto;
+}
+
+.result-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 3px;
+}
+
+.result-description {
+  font-size: 13px;
+  color: rgba(255,255,255,.5);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.result-extra {
+  font-size: 12px;
+  color: rgba(77,201,230,.6);
+  margin-top: 2px;
+}
+
+.result-arrow {
+  flex-shrink: 0;
+  color: rgba(255,255,255,.2);
+  transition: color .2s;
+  padding-top: 2px;
+}
+
+.result-item:hover .result-arrow {
+  color: #4dc9e6;
+}
+
+.result-arrow svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
+/* SIN RESULTADOS */
+
+.no-results {
+  text-align: center;
+  padding: 40px 20px;
+  color: rgba(255,255,255,.4);
+}
+
+.no-results-icon {
+  font-size: 36px;
+  margin-bottom: 12px;
+}
+
+.no-results-text {
+  font-size: 16px;
+  margin-bottom: 6px;
+  color: rgba(255,255,255,.6);
+}
+
+.no-results-text strong {
+  color: white;
+}
+
+.no-results-suggestion {
+  font-size: 13px;
+}
+
+/* HINT ESCRITURA CORTA */
+
+.search-hint {
+  padding: 16px 0;
+  font-size: 13px;
+  color: rgba(255,255,255,.35);
+  text-align: center;
 }
 
 /* ========== SIDEBAR ========== */

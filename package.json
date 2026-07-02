@@ -31,7 +31,6 @@
     "@angular/router": "^20.3.0",
     "@azure/cognitiveservices-face": "^5.0.0",
     "@azure/ms-rest-js": "^2.7.0",
-    "@elastic/elasticsearch": "^9.4.2",
     "face-api.js": "^0.22.2",
     "lucide-angular": "^0.563.0",
     "rxjs": "~7.8.0",
@@ -49,6 +48,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "playwright": "^1.61.1",
     "typescript": "~5.9.2"
   }
 }

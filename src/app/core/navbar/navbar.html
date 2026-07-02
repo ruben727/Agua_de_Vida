@@ -45,80 +45,93 @@
   <div class="search-container">
 
     <div class="search-top">
-
       <div class="logo">
         <img src="logo.png" class="logo-img">
         <span>Agua de Vida</span>
       </div>
-
       <button class="close-btn" (click)="closeSearch()">
         <svg viewBox="0 0 24 24">
           <line x1="18" y1="6" x2="6" y2="18"></line>
           <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
       </button>
-
     </div>
 
     <div class="search-box">
-
-      <input
-        type="text"
-        placeholder="Buscar sermones, eventos, avisos..."
-        [(ngModel)]="searchQuery"
-        (keyup)="performSearch()"
-        #searchInput
-      />
-
       <svg viewBox="0 0 24 24" class="search-icon">
         <circle cx="11" cy="11" r="7"></circle>
         <line x1="16.5" y1="16.5" x2="21" y2="21"></line>
       </svg>
-
+      <input
+        type="text"
+        placeholder="Buscar prédicas, avisos, predicadores..."
+        [(ngModel)]="searchQuery"
+        (input)="onSearchInput()"
+        #searchInput
+        autocomplete="off"
+      />
+      <button class="clear-btn" *ngIf="searchQuery.length > 0" (click)="searchQuery = ''; results = []">
+        <svg viewBox="0 0 24 24">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
     </div>
 
     <!-- INDICADOR DE CARGA -->
     <div class="loading-indicator" *ngIf="isLoading">
       <div class="spinner"></div>
-      <span>Buscando en Elasticsearch...</span>
+      <span>Buscando...</span>
     </div>
 
-    <!-- RESULTADOS DE BÚSQUEDA -->
-    <div class="search-results">
+    <!-- RESULTADOS -->
+    <div class="search-results" *ngIf="!isLoading">
 
-      <!-- Sin resultados -->
-      <div *ngIf="!isLoading && results.length === 0 && searchQuery.length > 2" class="no-results">
-        <div class="no-results-icon">🔍</div>
-        <div class="no-results-text">No se encontraron resultados para "{{searchQuery}}"</div>
-        <div class="no-results-suggestion">Intenta con otras palabras clave</div>
+      <!-- Sugerencia escritura corta -->
+      <div *ngIf="searchQuery.length > 0 && searchQuery.length < 2" class="search-hint">
+        Escribe al menos 2 caracteres para buscar
       </div>
 
-      <!-- Mostrar resultados -->
+      <!-- Sin resultados -->
+      <div *ngIf="results.length === 0 && searchQuery.trim().length >= 2" class="no-results">
+        <div class="no-results-icon">🔍</div>
+        <p class="no-results-text">Sin resultados para <strong>"{{ searchQuery }}"</strong></p>
+        <p class="no-results-suggestion">Intenta con otras palabras</p>
+      </div>
+
+      <!-- Contador -->
+      <div class="results-header" *ngIf="results.length > 0">
+        {{ results.length }} resultado{{ results.length !== 1 ? 's' : '' }} para
+        <strong>"{{ searchQuery }}"</strong>
+      </div>
+
+      <!-- Cards de resultado -->
       <div
         class="result-item"
         *ngFor="let result of results"
         (click)="goTo(result.route)"
       >
-        <div class="result-title">
-          <span class="result-icon">
-            {{ getRouteIcon(result.route) }}
-          </span>
-          {{ result.title }}
+        <div class="result-left">
+          <span class="result-icon">{{ getRouteIcon(result.route) }}</span>
         </div>
-        <div class="result-score" *ngIf="result.score">
-          Relevancia: {{ result.score | number:'1.0-0' }}%
-        </div>
-        <div class="result-keywords" *ngIf="result.matchedTerms">
-          <span *ngFor="let term of result.matchedTerms" class="keyword-tag">
-            {{ term }}
-          </span>
-        </div>
-      </div>
 
-      <!-- Sugerencia para búsquedas cortas -->
-      <div *ngIf="!isLoading && searchQuery.length > 0 && searchQuery.length <= 2" class="search-hint">
-        <div class="hint-icon"></div>
-        <div>Escribe al menos 3 caracteres para buscar</div>
+        <div class="result-body">
+          <div class="result-header-row">
+            <span class="result-badge" [ngClass]="getTypeClass(result.type)">
+              {{ getTypeLabel(result.type) }}
+            </span>
+            <span class="result-score">{{ result.score }}%</span>
+          </div>
+          <div class="result-title">{{ result.title }}</div>
+          <div class="result-description" *ngIf="result.description">{{ result.description }}</div>
+          <div class="result-extra" *ngIf="result.extraInfo">{{ result.extraInfo }}</div>
+        </div>
+
+        <div class="result-arrow">
+          <svg viewBox="0 0 24 24">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </div>
       </div>
 
     </div>
