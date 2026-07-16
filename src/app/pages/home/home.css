@@ -66,6 +66,7 @@
 .about {
   padding: 90px 20px;
   background: #f1f5f9;
+  scroll-margin-top: 90px;
 }
 
 .about-container {
@@ -119,6 +120,7 @@
 .services {
   padding: 90px 20px;
   text-align: center;
+  scroll-margin-top: 90px;
 }
 
 .services h2 {

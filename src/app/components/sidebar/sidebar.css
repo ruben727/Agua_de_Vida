@@ -1,14 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Nunito:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --sidebar-bg: #1a3a5c;
-  --sidebar-bg-hover: #1e4d78;
-  --sidebar-active-bg: #0f2744;
-  --sidebar-active-border: #4ea8d8;
+  --sidebar-bg: #225574;
+  --sidebar-bg-hover: #2c6d92;
+  --sidebar-active-bg: #1e3a8a;
+  --sidebar-active-border: #2563eb;
   --sidebar-text: #d4e9f7;
   --sidebar-text-muted: #7aaac8;
   --sidebar-icon: #7aaac8;
-  --sidebar-border: rgba(78, 168, 216, 0.15);
+  --sidebar-border: rgba(37, 99, 235, 0.15);
   --sidebar-width: 240px;
   --sidebar-width-collapsed: 68px;
   --sidebar-transition: 0.28s cubic-bezier(0.4, 0, 0.2, 1);
@@ -37,8 +37,8 @@
   left: 0;
   height: 100vh;
   width: var(--sidebar-width);
-  background: #1a3a5c;        /* fondo solido */
-  border-right: 1px solid rgba(78,168,216,0.2);
+  background: #225574;        /* fondo solido */
+  border-right: 1px solid rgba(37,99,235,0.2);
   display: flex;
   flex-direction: column;
   z-index: 100;
@@ -58,8 +58,8 @@
   justify-content: space-between;
   padding: 0 14px;
   height: var(--header-height);
-  background: #0f2744;
-  border-bottom: 1px solid rgba(78,168,216,0.15);
+  background: #1e3a8a;
+  border-bottom: 1px solid rgba(37,99,235,0.15);
   flex-shrink: 0;
   gap: 8px;
 }
@@ -79,9 +79,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(78,168,216,0.15);
+  background: rgba(37,99,235,0.15);
   border-radius: 8px;
-  border: 1px solid rgba(78,168,216,0.25);
+  border: 1px solid rgba(37,99,235,0.25);
 }
 .logo-icon svg { width: 22px; height: 22px; }
 
@@ -92,7 +92,7 @@
 }
 
 .logo-name {
-  font-family: 'Cinzel', serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 13px;
   font-weight: 700;
   color: #ffffff;
@@ -102,7 +102,7 @@
 }
 
 .logo-sub {
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 10px;
   color: #7aaac8;
   white-space: nowrap;
@@ -115,7 +115,7 @@
   width: 28px;
   height: 28px;
   border-radius: 6px;
-  border: 1px solid rgba(78,168,216,0.2);
+  border: 1px solid rgba(37,99,235,0.2);
   background: transparent;
   color: #7aaac8;
   cursor: pointer;
@@ -126,7 +126,7 @@
   transition: background 0.18s, color 0.18s;
 }
 .collapse-btn:hover {
-  background: #1e4d78;
+  background: #2c6d92;
   color: #fff;
 }
 .collapse-btn svg { width: 14px; height: 14px; }
@@ -138,7 +138,7 @@
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: none;
-  background: #1a3a5c;
+  background: #225574;
 }
 .sidebar-nav::-webkit-scrollbar { display: none; }
 
@@ -167,18 +167,18 @@
 }
 
 .nav-link:hover {
-  background: #1e4d78;
+  background: #2c6d92;
   color: #ffffff;
 }
 .nav-link:hover .nav-icon { color: #ffffff; }
 
 .nav-link.active {
-  background: #0f2744;
+  background: #1e3a8a;
   color: #ffffff;
-  border-left: 3px solid #4ea8d8;
+  border-left: 3px solid #2563eb;
   padding-left: 9px;
 }
-.nav-link.active .nav-icon { color: #4ea8d8; }
+.nav-link.active .nav-icon { color: #2563eb; }
 
 .nav-icon {
   width: 20px;
@@ -193,7 +193,7 @@
 .nav-icon svg { width: 20px; height: 20px; }
 
 .nav-label {
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 14px;
   font-weight: 600;
   overflow: hidden;
@@ -204,9 +204,9 @@
 .nav-tooltip {
   position: absolute;
   left: calc(var(--sidebar-width-collapsed) + 4px);
-  background: #0f2744;
+  background: #1e3a8a;
   color: #ffffff;
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 13px;
   font-weight: 600;
   padding: 6px 12px;
@@ -216,7 +216,7 @@
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.15s, visibility 0.15s;
-  border: 1px solid rgba(78,168,216,0.2);
+  border: 1px solid rgba(37,99,235,0.2);
   box-shadow: 4px 4px 12px rgba(0,0,0,0.3);
   z-index: 200;
 }
@@ -229,9 +229,9 @@
 /* Footer */
 .sidebar-footer {
   padding: 10px;
-  border-top: 1px solid rgba(78,168,216,0.15);
+  border-top: 1px solid rgba(37,99,235,0.15);
   flex-shrink: 0;
-  background: #1a3a5c;
+  background: #225574;
 }
 
 .logout-btn {
@@ -266,8 +266,8 @@
   width: 42px;
   height: 42px;
   border-radius: 8px;
-  border: 1px solid rgba(78,168,216,0.2);
-  background: #0f2744;
+  border: 1px solid rgba(37,99,235,0.2);
+  background: #1e3a8a;
   color: #ffffff;
   cursor: pointer;
   align-items: center;

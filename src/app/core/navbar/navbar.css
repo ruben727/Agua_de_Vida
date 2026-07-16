@@ -71,6 +71,93 @@
   width: 100%;
 }
 
+/* ===== MENÚ DESPLEGABLE (SUBMENÚS) ===== */
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.dropdown-toggle {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, .7);
+  cursor: pointer;
+  padding: 6px;
+  margin-left: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: .25s;
+}
+
+.dropdown-toggle:hover {
+  color: #4dc9e6;
+  background: rgba(255, 255, 255, .08);
+}
+
+.chevron {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2.5;
+  transition: transform .25s ease;
+}
+
+.menu-item.open .chevron,
+.dropdown-toggle[aria-expanded="true"] .chevron {
+  transform: rotate(180deg);
+}
+
+.dropdown-panel {
+  position: absolute;
+  top: calc(100% + 14px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #17384c;
+  border-radius: 10px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, .4);
+  padding: 10px;
+  min-width: 180px;
+  max-width: 260px;
+  max-height: 320px;
+  overflow-y: auto;
+  display: grid;
+  gap: 4px;
+  z-index: 200;
+  animation: dropdownOpen .2s ease;
+}
+
+@keyframes dropdownOpen {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.dropdown-panel a {
+  color: rgba(255, 255, 255, .85);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 500;
+  padding: 9px 12px;
+  border-radius: 6px;
+  transition: .2s;
+  white-space: nowrap;
+}
+
+.dropdown-panel a:hover {
+  background: rgba(77, 201, 230, .15);
+  color: #4dc9e6;
+}
+
 /* ICONOS */
 
 .icons {
@@ -107,6 +194,11 @@
   stroke: currentColor;
   fill: none;
   stroke-width: 2;
+}
+
+/* HAMBURGUESA: solo visible en móvil */
+.hamburger-btn {
+  display: none;
 }
 
 /* ========== BUSCADOR ========== */
@@ -533,6 +625,10 @@
     display: none;
   }
 
+  .hamburger-btn {
+    display: flex;
+  }
+
   .logo {
     font-size: 18px;
   }
@@ -546,6 +642,10 @@
   }
 
   .sidebar {
+    max-width: 100%;
+  }
+
+  .mobile-nav {
     max-width: 100%;
   }
 
@@ -652,4 +752,125 @@
 
 span{
   color: white;
+}
+
+/* ========== MENÚ HAMBURGUESA MÓVIL (DRAWER) ========== */
+
+.mobile-nav-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .7);
+  z-index: 999;
+}
+
+.mobile-nav {
+  position: fixed;
+  top: 0;
+  left: -400px;
+  width: 100%;
+  max-width: 400px;
+  height: 100vh;
+  background: #1a1a1a;
+  color: white;
+  z-index: 1000;
+  transition: left .3s ease;
+  overflow-y: auto;
+  box-shadow: 5px 0 20px rgba(0, 0, 0, .5);
+}
+
+.mobile-nav.active {
+  left: 0;
+}
+
+.mobile-nav-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px;
+  border-bottom: 1px solid rgba(255, 255, 255, .1);
+}
+
+.mobile-nav-content {
+  padding: 15px;
+}
+
+.mobile-nav-item {
+  border-bottom: 1px solid rgba(255, 255, 255, .06);
+}
+
+.mobile-nav-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mobile-nav-row a {
+  flex: 1;
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: .3px;
+  padding: 16px 10px;
+}
+
+.mobile-nav-row a.active {
+  color: #4dc9e6;
+}
+
+.mobile-expand-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, .6);
+  cursor: pointer;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
+
+.mobile-expand-btn:hover {
+  background: rgba(255, 255, 255, .08);
+  color: #4dc9e6;
+}
+
+.mobile-expand-btn .chevron.rotated {
+  transform: rotate(180deg);
+}
+
+.mobile-submenu {
+  display: grid;
+  gap: 2px;
+  padding: 0 10px 14px 20px;
+  animation: dropdownOpen .2s ease;
+}
+
+.mobile-submenu a {
+  color: rgba(255, 255, 255, .75);
+  text-decoration: none;
+  font-size: 14px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  transition: .2s;
+}
+
+.mobile-submenu a:hover {
+  background: rgba(77, 201, 230, .12);
+  color: #4dc9e6;
+}
+
+/* SCROLL MOBILE NAV */
+
+.mobile-nav::-webkit-scrollbar {
+  width: 6px;
+}
+
+.mobile-nav::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+.mobile-nav::-webkit-scrollbar-thumb {
+  background: rgba(77, 201, 230, .3);
+  border-radius: 3px;
 }

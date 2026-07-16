@@ -17,3 +17,50 @@
 a{
     color: aliceblue;
 }
+
+/* ===== SELECTOR DE TEMPORADA ===== */
+
+.theme-switcher {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, .12);
+}
+
+.theme-switcher-label {
+  display: block;
+  font-size: 12px;
+  letter-spacing: .5px;
+  color: rgba(255, 255, 255, .5);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.theme-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.theme-btn {
+  background: rgba(255, 255, 255, .06);
+  border: 1px solid rgba(255, 255, 255, .15);
+  color: aliceblue;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .25s;
+}
+
+.theme-btn:hover {
+  background: rgba(255, 255, 255, .14);
+  transform: translateY(-2px);
+}
+
+.theme-btn.active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: white;
+}

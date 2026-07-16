@@ -27,6 +27,35 @@
   font-size: 16px;
 }
 
+/* ====== FILTRO POR MES ====== */
+
+.filtro-activo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+  font-size: 14px;
+  color: #334155;
+}
+
+.filtro-activo a {
+  color: #2563eb;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.filtro-activo a:hover {
+  text-decoration: underline;
+}
+
+.sin-avisos {
+  text-align: center;
+  color: #64748b;
+  margin-bottom: 40px;
+}
+
 /* ====== GRID ====== */
 
 .avisos-grid {

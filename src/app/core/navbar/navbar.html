@@ -6,16 +6,64 @@
     <span>Agua de Vida</span>
   </div>
 
-  <!-- LINKS -->
+  <!-- LINKS CON SUBMENÚ DESPLEGABLE -->
   <div class="links">
-    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">INICIO</a>
-    <a routerLink="/predicas" routerLinkActive="active">PREDICAS</a>
-    <a routerLink="/avisos" routerLinkActive="active">AVISOS</a>
-    <a routerLink="/contacto" routerLinkActive="active">CONTACTO</a>
+    <div
+      class="menu-item"
+      *ngFor="let item of menuItems"
+      [class.open]="openDropdown === item.label"
+    >
+      <a
+        [routerLink]="item.route"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{exact: item.exact}"
+        (click)="closeDropdown()"
+      >
+        {{ item.label }}
+      </a>
+
+      <button
+        type="button"
+        class="dropdown-toggle"
+        (click)="toggleDropdown(item.label, $event)"
+        [attr.aria-expanded]="openDropdown === item.label"
+        [attr.aria-label]="'Mostrar submenú de ' + item.label"
+      >
+        <svg class="chevron" viewBox="0 0 24 24">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </button>
+
+      <div class="dropdown-panel" *ngIf="openDropdown === item.label" (click)="$event.stopPropagation()">
+        <a
+          *ngFor="let sub of item.submenu"
+          [routerLink]="sub.route"
+          [queryParams]="sub.queryParams ?? null"
+          [fragment]="sub.fragment"
+          (click)="closeDropdown()"
+        >
+          {{ sub.label }}
+        </a>
+      </div>
+    </div>
   </div>
 
   <!-- ICONOS -->
   <div class="icons">
+
+    <!-- HAMBURGUESA (SOLO MÓVIL) -->
+    <button
+      class="icon-btn hamburger-btn"
+      (click)="toggleMobileNav(); $event.stopPropagation()"
+      aria-label="Menú de navegación"
+      [attr.aria-expanded]="mobileNavOpen"
+    >
+      <svg viewBox="0 0 24 24">
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
 
     <!-- LUPA -->
     <button class="icon-btn" (click)="openSearch()" aria-label="Buscar">
@@ -201,7 +249,7 @@
     </div>
 
     <br><br>
-    
+
     <!-- OTROS -->
     <div class="sidebar-section">
 
@@ -211,6 +259,74 @@
           Inicio de sesión
         </a>
 
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- MENÚ HAMBURGUESA MÓVIL (acordeón con el mismo contenido del menú de escritorio) -->
+<div class="mobile-nav-overlay" *ngIf="mobileNavOpen" (click)="closeMobileNav()"></div>
+
+<div class="mobile-nav" [class.active]="mobileNavOpen">
+
+  <div class="mobile-nav-header">
+
+    <div class="logo">
+      <img src="logo.png" alt="Agua de Vida" class="logo-img" />
+      <span>Agua de Vida</span>
+    </div>
+
+    <button class="close-btn" (click)="closeMobileNav()" aria-label="Cerrar menú">
+      <svg viewBox="0 0 24 24">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+
+  </div>
+
+  <div class="mobile-nav-content">
+
+    <div class="mobile-nav-item" *ngFor="let item of menuItems">
+
+      <div class="mobile-nav-row">
+
+        <a
+          [routerLink]="item.route"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{exact: item.exact}"
+          (click)="closeMobileNav()"
+        >
+          {{ item.label }}
+        </a>
+
+        <button
+          type="button"
+          class="mobile-expand-btn"
+          (click)="toggleMobileSection(item.label, $event)"
+          [attr.aria-expanded]="mobileExpanded === item.label"
+          [attr.aria-label]="'Mostrar submenú de ' + item.label"
+        >
+          <svg class="chevron" [class.rotated]="mobileExpanded === item.label" viewBox="0 0 24 24">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+
+      </div>
+
+      <div class="mobile-submenu" *ngIf="mobileExpanded === item.label">
+        <a
+          *ngFor="let sub of item.submenu"
+          [routerLink]="sub.route"
+          [queryParams]="sub.queryParams ?? null"
+          [fragment]="sub.fragment"
+          (click)="closeMobileNav()"
+        >
+          {{ sub.label }}
+        </a>
       </div>
 
     </div>

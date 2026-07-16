@@ -1,0 +1,17 @@
+<!-- BANNER DE TEMPORADA -->
+<div class="seasonal-banner" *ngIf="theme() !== 'normal'" [ngClass]="'banner-' + theme()">
+  <span *ngIf="theme() === 'navidad'">🎄 ¡Feliz Navidad! Que la luz de Cristo llene tu hogar</span>
+  <span *ngIf="theme() === 'independencia'">🇲🇽 ¡Viva México! Celebrando nuestras Fiestas Patrias</span>
+</div>
+
+<!-- ANIMACION DE COPOS DE NIEVE -->
+<div class="snowfall" *ngIf="theme() === 'navidad'" aria-hidden="true">
+  <span
+    class="snowflake"
+    *ngFor="let flake of snowflakes"
+    [style.left.%]="flake.left"
+    [style.animation-duration.s]="flake.duration"
+    [style.animation-delay.s]="flake.delay"
+    [style.font-size.px]="flake.size"
+  >❄</span>
+</div>

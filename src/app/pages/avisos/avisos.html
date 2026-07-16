@@ -5,19 +5,36 @@
       Mantente informado sobre nuestras próximas actividades y eventos especiales.
     </p>
 
-    <div class="avisos-grid">
-      <div class="aviso-card" *ngFor="let aviso of avisos">
+    <div class="filtro-activo" *ngIf="mesSeleccionado">
+      <span>Mostrando avisos de <strong>{{ nombreMesSeleccionado }}</strong></span>
+      <a routerLink="/avisos">Ver todos</a>
+    </div>
+
+    <p class="sin-avisos" *ngIf="loading">Cargando avisos…</p>
+
+    <p class="sin-avisos" *ngIf="!loading && errorMsg">{{ errorMsg }}</p>
+
+    <p class="sin-avisos" *ngIf="!loading && !errorMsg && mesSeleccionado && avisosFiltrados.length === 0">
+      No hay avisos registrados para {{ nombreMesSeleccionado }}.
+    </p>
+
+    <p class="sin-avisos" *ngIf="!loading && !errorMsg && !mesSeleccionado && avisosFiltrados.length === 0">
+      Por el momento no hay avisos publicados.
+    </p>
+
+    <div class="avisos-grid" *ngIf="!loading && !errorMsg">
+      <div class="aviso-card" *ngFor="let aviso of avisosFiltrados">
 
         <div class="image-container">
-          <img [src]="aviso.imagen" [alt]="aviso.titulo">
+          <img [src]="aviso.imagen_url" [alt]="aviso.titulo">
         </div>
 
         <div class="aviso-content">
           <h2>{{ aviso.titulo }}</h2>
-          <span class="fecha">{{ aviso.fecha }}</span>
+          <span class="fecha">{{ formatFecha(aviso.fecha) }}</span>
 
           <p class="resumen">
-            {{ aviso.resumen }}
+            {{ resumen(aviso.descripcion) }}
           </p>
 
           <div class="descripcion" [class.show]="aviso.expanded">

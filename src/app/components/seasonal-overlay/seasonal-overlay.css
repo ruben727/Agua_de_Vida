@@ -1,0 +1,61 @@
+/* ===== BANNER DE TEMPORADA ===== */
+
+.seasonal-banner {
+  text-align: center;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 9px 12px;
+  letter-spacing: .3px;
+}
+
+.banner-navidad {
+  background: linear-gradient(90deg, #b91c1c, #166534, #b91c1c);
+  color: #fff;
+}
+
+.banner-independencia {
+  background: linear-gradient(90deg,
+    #006341 0%, #006341 33%,
+    #ffffff 33%, #ffffff 66%,
+    #ce1126 66%, #ce1126 100%);
+  color: #111;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, .6);
+}
+
+@media (max-width: 600px) {
+  .seasonal-banner {
+    font-size: 12px;
+    padding: 7px 10px;
+  }
+}
+
+/* ===== NIEVE ANIMADA ===== */
+
+.snowfall {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 5;
+}
+
+.snowflake {
+  position: absolute;
+  top: -5%;
+  color: #fff;
+  text-shadow: 0 0 4px rgba(0, 0, 0, .25);
+  animation-name: snow-fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes snow-fall {
+  0% {
+    transform: translateY(-10vh) translateX(0) rotate(0deg);
+    opacity: .9;
+  }
+  100% {
+    transform: translateY(110vh) translateX(25px) rotate(360deg);
+    opacity: .5;
+  }
+}

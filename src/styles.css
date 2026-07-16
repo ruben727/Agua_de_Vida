@@ -2,3 +2,62 @@
 body {
   font-family: Arial, sans-serif;
 }
+
+/* ==========================================================
+   TEMAS DE TEMPORADA (calendarizados o elegidos en el footer)
+   ========================================================== */
+
+/* ---- NAVIDAD (diciembre) ---- */
+
+body.theme-navidad .menu {
+  background: #7f1d1d;
+}
+
+body.theme-navidad .links a:hover,
+body.theme-navidad .links a.active,
+body.theme-navidad .links a::after,
+body.theme-navidad .menu-item > button:hover,
+body.theme-navidad .menu-item.open > button {
+  color: #ffd166;
+}
+
+body.theme-navidad .links a::after {
+  background: #ffd166;
+}
+
+body.theme-navidad .footer {
+  background: #1a0f0f;
+  border-top: 3px solid #166534;
+}
+
+body.theme-navidad .btn,
+body.theme-navidad .theme-btn.active {
+  background: #b91c1c;
+}
+
+/* ---- FIESTAS PATRIAS (septiembre) ---- */
+
+body.theme-independencia .menu {
+  background: #006341;
+}
+
+body.theme-independencia .links a:hover,
+body.theme-independencia .links a.active,
+body.theme-independencia .links a::after,
+body.theme-independencia .menu-item > button:hover,
+body.theme-independencia .menu-item.open > button {
+  color: #ce1126;
+}
+
+body.theme-independencia .links a::after {
+  background: #ce1126;
+}
+
+body.theme-independencia .footer {
+  background: linear-gradient(180deg, #0f172a 85%, #006341 85%, #006341 92%, #ffffff 92%, #ffffff 96%, #ce1126 96%, #ce1126 100%);
+}
+
+body.theme-independencia .btn,
+body.theme-independencia .theme-btn.active {
+  background: #ce1126;
+}

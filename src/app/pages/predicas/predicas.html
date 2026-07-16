@@ -8,7 +8,7 @@
 
     <div class="canal-texto">
       <h2>Agua de Vida</h2>
-    
+
     </div>
   </div>
 </section>
@@ -18,40 +18,36 @@
 
   <div class="tabs">
     <span class="active">Videos</span>
-    
   </div>
 
-  <div class="videos-grid">
+  <div class="filtro-activo" *ngIf="mesSeleccionado">
+    <span>Mostrando prédicas de <strong>{{ nombreMesSeleccionado }}</strong></span>
+    <a routerLink="/predicas">Ver todas</a>
+  </div>
 
-    <!-- Card 1 -->
-    <div class="video-card">
-      <img src="/predica1.jpg" alt="Predica">
-      <div class="video-info">
-        <h3>No te amargues en el proceso</h3>
-        <p>Ps. Clamente Resendiz</p>
-        <span>Hace 2 días</span>
-      </div>
-    </div>
+  <p class="sin-predicas" *ngIf="loading">Cargando prédicas…</p>
 
-    <!-- Card 2 -->
-    <div class="video-card">
-      <img src="/predica1.jpg" alt="Predica">
-      <div class="video-info">
-        <h3>A la sombra de tus alas</h3>
-        <p>Ps. Clamente Resendiz</p>
-        <span>Hace 5 días</span>
-      </div>
-    </div>
+  <p class="sin-predicas" *ngIf="!loading && errorMsg">{{ errorMsg }}</p>
 
-    <!-- Card 3 -->
-    <div class="video-card">
-      <img src="/predica1.jpg" alt="Predica">
+  <p class="sin-predicas" *ngIf="!loading && !errorMsg && mesSeleccionado && predicasFiltradas.length === 0">
+    No hay prédicas registradas para {{ nombreMesSeleccionado }}.
+  </p>
+
+  <p class="sin-predicas" *ngIf="!loading && !errorMsg && !mesSeleccionado && predicasFiltradas.length === 0">
+    Por el momento no hay prédicas publicadas.
+  </p>
+
+  <div class="videos-grid" *ngIf="!loading && !errorMsg">
+
+    <a class="video-card" *ngFor="let predica of predicasFiltradas"
+       [href]="predica.youtube_url" target="_blank" rel="noopener noreferrer">
+      <img [src]="predica.imagen_url" [alt]="predica.titulo">
       <div class="video-info">
-        <h3>Soy Semilla</h3>
-        <p>Ps. Clamente Resendiz</p>
-        <span>Hace 1 semana</span>
+        <h3>{{ predica.titulo }}</h3>
+        <p>{{ predica.predicador }}</p>
+        <span>{{ formatFecha(predica.fecha) }}</span>
       </div>
-    </div>
+    </a>
 
   </div>
 </section>

@@ -3,11 +3,12 @@ import { RouterOutlet, NavigationEnd, Router } from '@angular/router';
 import { NavbarComponent } from './core/navbar/navbar';
 import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs/operators';
+import { SeasonalOverlay } from './components/seasonal-overlay/seasonal-overlay';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavbarComponent, CommonModule],
+  imports: [RouterOutlet, NavbarComponent, CommonModule, SeasonalOverlay],
   templateUrl: './app.html',
 })
 export class App {

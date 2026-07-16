@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { ThemeService, SiteTheme } from '../../services/theme.service';
 
 @Component({
   selector: 'app-footer',
@@ -10,5 +11,10 @@ import { RouterModule } from '@angular/router';
   styleUrl: './footer.css'
 })
 export class Footer {
+  private themeService = inject(ThemeService);
+  theme = this.themeService.theme;
 
+  setTheme(theme: SiteTheme) {
+    this.themeService.setTheme(theme);
+  }
 }

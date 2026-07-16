@@ -7,5 +7,41 @@
     <p>Tel: (555) 123-4567</p>
     <p>© 2026 Iglesia Agua de Vida - Todos los derechos reservados</p>
     <a routerLink="/privacidad">Aviso de Privacidad</a>
+
+    <!-- SELECTOR DE TEMPORADA -->
+    <div class="theme-switcher">
+      <span class="theme-switcher-label">Temporada del sitio:</span>
+      <div class="theme-buttons">
+        <button
+          type="button"
+          class="theme-btn"
+          [class.active]="theme() === 'normal'"
+          (click)="setTheme('normal')"
+          aria-label="Tema normal"
+        >
+          🔷 Normal
+        </button>
+
+        <button
+          type="button"
+          class="theme-btn"
+          [class.active]="theme() === 'navidad'"
+          (click)="setTheme('navidad')"
+          aria-label="Tema navideño"
+        >
+          🎄 Navideño
+        </button>
+
+        <button
+          type="button"
+          class="theme-btn"
+          [class.active]="theme() === 'independencia'"
+          (click)="setTheme('independencia')"
+          aria-label="Tema fiestas patrias"
+        >
+          🇲🇽 Septiembre
+        </button>
+      </div>
+    </div>
   </div>
 </footer>
